@@ -1,0 +1,12 @@
+# Python files
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Large Dataset (Do not upload to GitHub)
+phishing_site_urls.csv
+
+# Local logs/models (Optional: Keep models, but ignore logs)
+scan_history.json
