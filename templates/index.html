@@ -3,137 +3,640 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhishIntel | AI Hybrid Security</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-    </style>
+    <title>PhishGuard — AI Phishing Detector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="bg-[#020617] text-slate-300 min-h-screen p-4 md:p-12 font-sans">
+<body>
 
-    <div class="max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-12">
-            <div>
-                <h1 class="text-4xl font-black text-white tracking-tighter uppercase">PHISH<span class="text-emerald-500 italic">INTEL</span></h1>
-                <p class="text-[10px] font-mono text-slate-500 tracking-[0.3em] uppercase">Hybrid Detection Engine v4.0</p>
-            </div>
-            <div class="hidden md:block text-right">
-                <p class="text-[10px] text-slate-500 font-bold uppercase">System Status</p>
-                <p class="text-emerald-500 font-black text-sm tracking-widest">● CORE ONLINE</p>
-            </div>
-        </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-brand">
+        <div class="nav-logo"><i class="fa-solid fa-shield-halved"></i></div>
+        <span class="nav-name">PhishGuard</span>
+        <span class="nav-badge">AI v2.0</span>
+    </div>
+    <div class="nav-links">
+        <a class="nav-link active" href="#" onclick="switchPage('scanner',this);return false">
+            <i class="fa-solid fa-radar"></i> Scanner
+        </a>
+        <a class="nav-link" href="#" onclick="switchPage('history',this);return false">
+            <i class="fa-solid fa-clock-rotate-left"></i> History
+        </a>
+        <a class="nav-link" href="#" onclick="switchPage('about',this);return false">
+            <i class="fa-solid fa-circle-info"></i> About
+        </a>
+    </div>
+    <div class="nav-status">
+        <span class="status-dot"></span>
+        <span class="status-label">Online</span>
+    </div>
+</nav>
 
-        <div class="bg-white/5 border border-white/10 rounded-[3rem] p-8 md:p-16 backdrop-blur-3xl shadow-2xl mb-12">
-            <div class="max-w-3xl mx-auto relative">
-                <input type="text" id="urlInput" placeholder="Paste URL for AI Analysis..." 
-                       class="w-full bg-black/40 border-2 border-white/10 rounded-2xl py-6 px-8 text-white text-lg focus:outline-none focus:border-emerald-500/50 transition-all outline-none">
-                <button onclick="performScan()" id="scanBtn" 
-                        class="absolute right-3 top-3 bottom-3 px-10 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-xl uppercase transition-all shadow-lg shadow-emerald-500/20">
-                    Analyze
-                </button>
-            </div>
+<!-- PAGES -->
+<div class="app">
 
-            <div id="resultCard" class="hidden mt-12 p-8 rounded-[2rem] border-2 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div id="statusIcon" class="text-6xl p-6 rounded-3xl bg-white/5"></div>
-                    <div class="flex-1 text-center md:text-left">
-                        <div class="flex flex-col md:flex-row justify-between items-center mb-4">
-                            <h2 id="statusTitle" class="text-3xl font-black uppercase tracking-tight"></h2>
-                            <span id="riskScore" class="px-4 py-1 rounded-full text-xs font-black border"></span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-6 py-4 border-y border-white/5">
-                            <div>
-                                <p class="text-[10px] uppercase text-slate-500 font-bold">Domain Identity</p>
-                                <p id="ageText" class="text-sm font-mono text-white"></p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] uppercase text-slate-500 font-bold">AI Verdict</p>
-                                <p id="verdictText" class="text-sm font-mono text-white"></p>
-                            </div>
-                        </div>
-                        <ul id="reasonsList" class="text-xs space-y-2 opacity-70 font-mono"></ul>
+    <!--  SCANNER PAGE -->
+    <div id="page-scanner" class="page active">
+
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-inner">
+                <div class="hero-tag"><i class="fa-solid fa-bolt"></i> Real-Time AI Detection</div>
+                <h1 class="hero-title">Is this URL safe?</h1>
+                <p class="hero-desc">
+                    Our AI engine analyses any URL using a hybrid machine learning pipeline —
+                    combining TF-IDF text analysis with 15 domain intelligence features — and
+                    returns a detailed phishing risk report in seconds.
+                </p>
+
+                <!-- Input -->
+                <div class="input-box">
+                    <div class="input-row">
+                        <i class="fa-solid fa-link input-icon"></i>
+                        <input
+                            id="urlInput"
+                            type="text"
+                            class="url-input"
+                            placeholder="Paste any URL here — e.g. https://paypal-login.tk/verify"
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <button id="scanBtn" class="scan-btn" onclick="performScan()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>Analyse URL</span>
+                        </button>
+                    </div>
+                    <div class="try-row">
+                        <span class="try-label">Try an example:</span>
+                        <button class="try-chip try-safe" onclick="quickTest('https://github.com')">
+                            <i class="fa-solid fa-check-circle"></i> github.com (safe)
+                        </button>
+                        <button class="try-chip try-bad" onclick="quickTest('http://paypal-secure-login.tk/verify')">
+                            <i class="fa-solid fa-skull-crossbones"></i> paypal phish
+                        </button>
+                        <button class="try-chip try-bad" onclick="quickTest('http://login.paypal.account-verify.xyz/update')">
+                            <i class="fa-solid fa-skull-crossbones"></i> brand spoof
+                        </button>
+                        <button class="try-chip try-bad" onclick="quickTest('http://185.234.219.76/admin/login.php')">
+                            <i class="fa-solid fa-skull-crossbones"></i> IP attack
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-emerald-500/5 border border-emerald-500/10 rounded-[2rem] p-8">
-                <h3 class="text-emerald-500 font-black text-xs uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-                    <i class="fa-solid fa-circle-check"></i> Verified Safe URLs
-                </h3>
-                <div id="goodLogs" class="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar"></div>
+        <!-- Scanning indicator -->
+        <div id="scanningBox" class="scanning-box hidden">
+            <div class="scanning-inner">
+                <div class="scan-pulse">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="scan-text-wrap">
+                    <p class="scan-title">Analysing URL...</p>
+                    <p class="scan-sub" id="scanSub">Initializing pipeline</p>
+                </div>
+            </div>
+            <div class="scan-checklist">
+                <div class="sc-item" id="sc1"><i class="far fa-circle"></i> Tokenizing &amp; stemming URL text</div>
+                <div class="sc-item" id="sc2"><i class="far fa-circle"></i> Running TF-IDF vectorization</div>
+                <div class="sc-item" id="sc3"><i class="far fa-circle"></i> Extracting 15 domain features</div>
+                <div class="sc-item" id="sc4"><i class="far fa-circle"></i> AI model prediction</div>
+            </div>
+            <div class="scan-bar-wrap"><div class="scan-bar" id="scanBar"></div></div>
+        </div>
+
+        <!-- Result -->
+        <div id="resultBox" class="result-box hidden">
+
+            <div class="result-header" id="resultHeader">
+                <div class="rh-left">
+                    <div class="rh-icon" id="rhIcon"><i id="rhIconEl" class="fa-solid fa-shield-check"></i></div>
+                    <div class="rh-text">
+                        <h2 class="rh-verdict" id="rhVerdict">Safe URL</h2>
+                        <p class="rh-url" id="rhUrl"></p>
+                    </div>
+                </div>
+                <div class="rh-score-wrap">
+                    <svg class="score-svg" viewBox="0 0 140 140">
+                        <circle class="sc-track" cx="70" cy="70" r="56"/>
+                        <circle class="sc-ring" id="scRing" cx="70" cy="70" r="56"
+                            stroke-dasharray="352" stroke-dashoffset="352"/>
+                    </svg>
+                    <div class="score-inner">
+                        <span class="score-num" id="scoreNum">0</span>
+                        <span class="score-sub">% risk</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="bg-red-500/5 border border-red-500/10 rounded-[2rem] p-8">
-                <h3 class="text-red-500 font-black text-xs uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Threat Intel History
-                </h3>
-                <div id="badLogs" class="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar"></div>
+            <!-- Info row -->
+            <div class="info-row">
+                <div class="info-tile">
+                    <i class="fa-solid fa-calendar-days info-ico"></i>
+                    <div>
+                        <div class="info-label">Domain Age</div>
+                        <div class="info-val" id="infoAge">—</div>
+                    </div>
+                </div>
+                <div class="info-tile">
+                    <i class="fa-solid fa-robot info-ico"></i>
+                    <div>
+                        <div class="info-label">AI Model Used</div>
+                        <div class="info-val" id="infoModel">—</div>
+                    </div>
+                </div>
+                <div class="info-tile">
+                    <i class="fa-solid fa-lock info-ico" id="infoProtoIco"></i>
+                    <div>
+                        <div class="info-label">Protocol</div>
+                        <div class="info-val" id="infoProto">—</div>
+                    </div>
+                </div>
+                <div class="info-tile">
+                    <i class="fa-solid fa-ruler-horizontal info-ico"></i>
+                    <div>
+                        <div class="info-label">URL Length</div>
+                        <div class="info-val" id="infoLen">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two columns -->
+            <div class="result-cols">
+                <div class="result-col">
+                    <h3 class="col-title"><i class="fa-solid fa-list-check"></i> Signal Analysis</h3>
+                    <div id="signalsList"></div>
+                </div>
+                <div class="result-col">
+                    <h3 class="col-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Detection Breakdown</h3>
+                    <div id="reasonsList"></div>
+                </div>
+            </div>
+
+            <div class="result-footer">
+                <button class="again-btn" onclick="resetScan()">
+                    <i class="fa-solid fa-rotate-right"></i> Scan Another URL
+                </button>
             </div>
         </div>
+
+        <!-- Stats -->
+        <div class="stats-section">
+            <div class="section-label">Session Statistics</div>
+            <div class="stats-grid">
+                <div class="scard scard-blue">
+                    <div class="scard-top">
+                        <i class="fa-solid fa-database scard-icon"></i>
+                        <span class="scard-num" id="stTotal">0</span>
+                    </div>
+                    <div class="scard-label">Total Scanned</div>
+                </div>
+                <div class="scard scard-green">
+                    <div class="scard-top">
+                        <i class="fa-solid fa-shield-check scard-icon"></i>
+                        <span class="scard-num" id="stSafe">0</span>
+                    </div>
+                    <div class="scard-label">Safe URLs</div>
+                </div>
+                <div class="scard scard-red">
+                    <div class="scard-top">
+                        <i class="fa-solid fa-biohazard scard-icon"></i>
+                        <span class="scard-num" id="stDanger">0</span>
+                    </div>
+                    <div class="scard-label">Threats Detected</div>
+                </div>
+                <div class="scard scard-orange">
+                    <div class="scard-top">
+                        <i class="fa-solid fa-percent scard-icon"></i>
+                        <span class="scard-num" id="stRate">—</span>
+                    </div>
+                    <div class="scard-label">Threat Rate</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <script>
-        async function updateLogs() {
-            const res = await fetch('/logs');
-            const data = await res.json();
-            
-            const logItem = (item) => `
-                <div class="bg-black/40 border border-white/5 p-4 rounded-xl flex justify-between items-center">
-                    <div class="truncate mr-4 text-left">
-                        <p class="text-[11px] font-mono text-slate-300 truncate">${item.url}</p>
-                        <p class="text-[9px] text-slate-600 font-bold uppercase mt-1">${item.time}</p>
-                    </div>
-                    <span class="text-[10px] font-black ${item.status === 'safe' ? 'text-emerald-500' : 'text-red-500'}">${item.score}%</span>
-                </div>`;
+    <!-- HISTORY PAGE -->
+    <div id="page-history" class="page">
 
-            document.getElementById('goodLogs').innerHTML = data.good.map(logItem).join('') || '<p class="text-xs opacity-30 italic">No safe history</p>';
-            document.getElementById('badLogs').innerHTML = data.bad.map(logItem).join('') || '<p class="text-xs opacity-30 italic">No threats logged</p>';
-        }
+        <div class="page-header">
+            <div>
+                <h2 class="page-title">Scan History</h2>
+                <p class="page-desc">All previously scanned URLs — click any row to re-scan it</p>
+            </div>
+            <div class="page-actions">
+                <div class="filter-tabs">
+                    <button class="ftab active" onclick="filterLogs('all',this)">All</button>
+                    <button class="ftab" onclick="filterLogs('safe',this)">
+                        <span class="fdot fdot-green"></span> Safe
+                    </button>
+                    <button class="ftab" onclick="filterLogs('threats',this)">
+                        <span class="fdot fdot-red"></span> Threats
+                    </button>
+                </div>
+                <button class="del-btn" onclick="clearLogs()">
+                    <i class="fa-solid fa-trash"></i> Clear All
+                </button>
+            </div>
+        </div>
 
-        async function performScan() {
-            const url = document.getElementById('urlInput').value;
-            if(!url) return;
+        <div class="table-card">
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Status</th>
+                        <th>Risk Score</th>
+                        <th>Scanned At</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="logBody">
+                    <tr class="empty-row">
+                        <td colspan="5">No scans yet. Go to the Scanner tab to check a URL.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-            const btn = document.getElementById('scanBtn');
-            btn.innerText = "SCANNING..."; btn.disabled = true;
+    </div>
 
-            try {
-                const response = await fetch('/analyze', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ url })
-                });
-                const d = await response.json();
+    <!--  ABOUT PAGE -->
+    <div id="page-about" class="page">
 
-                const card = document.getElementById('resultCard');
-                card.classList.remove('hidden');
+        <div class="page-header">
+            <div>
+                <h2 class="page-title">About PhishGuard</h2>
+                <p class="page-desc">How the AI-powered phishing detection engine works</p>
+            </div>
+        </div>
 
-                const isSafe = d.status === 'safe';
-                const color = isSafe ? 'emerald' : 'red';
+        <div class="about-cards">
+            <div class="about-card">
+                <div class="ac-icon blue-ic"><i class="fa-solid fa-diagram-project"></i></div>
+                <h3>Hybrid AI Pipeline</h3>
+                <p>Combines TF-IDF text analysis of URL tokens with 15 hand-crafted numerical features into a 50,015-dimension feature matrix fed into machine learning models.</p>
+            </div>
+            <div class="about-card">
+                <div class="ac-icon green-ic"><i class="fa-solid fa-tree"></i></div>
+                <h3>Random Forest</h3>
+                <p>Best-performing model with 98.1% test accuracy and AUC-ROC of 0.994, trained on 549,346 labelled URLs from PhishTank and legitimate URL datasets.</p>
+            </div>
+            <div class="about-card">
+                <div class="ac-icon orange-ic"><i class="fa-solid fa-masks-theater"></i></div>
+                <h3>Brand Spoofing Detection</h3>
+                <p>Detects URLs where a known brand (PayPal, Google, Apple) appears in the subdomain but not the actual registered domain — a classic phishing technique.</p>
+            </div>
+            <div class="about-card">
+                <div class="ac-icon red-ic"><i class="fa-solid fa-globe"></i></div>
+                <h3>Suspicious TLD Detection</h3>
+                <p>Flags domains using free or abused Top-Level Domains like .tk, .xyz, .ml and .ga which are disproportionately used in phishing campaigns.</p>
+            </div>
+            <div class="about-card">
+                <div class="ac-icon purple-ic"><i class="fa-solid fa-server"></i></div>
+                <h3>IP Address Detection</h3>
+                <p>Identifies URLs using a raw IP address as the domain (e.g. http://192.168.1.1/login). Legitimate websites always use registered domain names.</p>
+            </div>
+            <div class="about-card">
+                <div class="ac-icon teal-ic"><i class="fa-solid fa-code"></i></div>
+                <h3>Flask REST API</h3>
+                <p>Python Flask backend. The /analyze endpoint runs tokenization, TF-IDF, feature extraction, scaling, and model inference — returning a full JSON risk report.</p>
+            </div>
+        </div>
 
-                card.className = `mt-12 p-8 rounded-[2rem] border-2 bg-${color}-500/5 border-${color}-500/20 text-${color}-500 animate-in fade-in`;
-                document.getElementById('statusIcon').innerHTML = `<i class="fa-solid ${isSafe ? 'fa-shield-check' : 'fa-biohazard'}"></i>`;
-                document.getElementById('statusTitle').innerText = isSafe ? "Secure Connection" : "Phishing Detected";
-                document.getElementById('riskScore').innerText = `RISK SCORE: ${d.score}%`;
-                document.getElementById('riskScore').className = `px-4 py-1 rounded-full text-xs font-black border border-${color}-500/40`;
-                
-                document.getElementById('ageText').innerText = d.age;
-                document.getElementById('verdictText').innerText = d.status.toUpperCase();
-                document.getElementById('reasonsList').innerHTML = d.reasons.map(r => `<li>• ${r}</li>`).join('');
+        <div class="feat-section">
+            <h3 class="feat-title"><i class="fa-solid fa-list-ol"></i> All 15 Engineered Features</h3>
+            <div class="feat-grid">
+                <div class="feat-row feat-head">
+                    <span>#</span><span>Feature Name</span><span>Type</span><span>Phishing Signal</span>
+                </div>
+                <div class="feat-row"><span>1</span><code>url_length</code><span class="ftype int">Integer</span><span>Long URLs are a common phishing indicator</span></div>
+                <div class="feat-row"><span>2</span><code>dot_count</code><span class="ftype int">Integer</span><span>More dots = deeper subdomain nesting</span></div>
+                <div class="feat-row"><span>3</span><code>hyphen_count</code><span class="ftype int">Integer</span><span>Hyphens mimic brand names (paypal-login)</span></div>
+                <div class="feat-row"><span>4</span><code>slash_count</code><span class="ftype int">Integer</span><span>Deep paths suggest obfuscation</span></div>
+                <div class="feat-row"><span>5</span><code>at_symbol</code><span class="ftype bin">Binary</span><span>@ redirects browser to post-@ address</span></div>
+                <div class="feat-row"><span>6</span><code>double_slash</code><span class="ftype bin">Binary</span><span>// used as a URL redirect trick</span></div>
+                <div class="feat-row"><span>7</span><code>https</code><span class="ftype bin">Binary</span><span>HTTP (no SSL) is a negative trust signal</span></div>
+                <div class="feat-row"><span>8</span><code>has_ip</code><span class="ftype bin">Binary</span><span>Raw IP as domain — legitimate sites never do this</span></div>
+                <div class="feat-row"><span>9</span><code>special_char_count</code><span class="ftype int">Integer</span><span>Unusual characters used for encoding tricks</span></div>
+                <div class="feat-row"><span>10</span><code>subdomain_depth</code><span class="ftype int">Integer</span><span>Deep subdomains used to hide the real domain</span></div>
+                <div class="feat-row"><span>11</span><code>domain_length</code><span class="ftype int">Integer</span><span>Very long domains are often auto-generated</span></div>
+                <div class="feat-row"><span>12</span><code>suspicious_tld</code><span class="ftype bin">Binary</span><span>Free TLDs (.tk .xyz .ml) heavily abused</span></div>
+                <div class="feat-row"><span>13</span><code>brand_spoofing</code><span class="ftype bin">Binary</span><span>Brand in subdomain but not in real domain</span></div>
+                <div class="feat-row"><span>14</span><code>suspicious_keyword_count</code><span class="ftype int">Integer</span><span>login, verify, secure, confirm, credential...</span></div>
+                <div class="feat-row"><span>15</span><code>path_depth</code><span class="ftype int">Integer</span><span>Deep paths mimic legitimate site structure</span></div>
+            </div>
+        </div>
 
-                updateLogs();
-            } catch (e) {
-                alert("Error connecting to server.");
-            } finally {
-                btn.innerText = "Analyze"; btn.disabled = false;
+    </div>
+</div>
+
+<!--  FOOTER -->
+<footer class="footer">
+    <span>PhishGuard AI &copy; 2026 — Final Year Project &middot; BSc Information Technology</span>
+    <span>Random Forest · 98.1% Accuracy · AUC-ROC 0.994</span>
+</footer>
+
+<script>
+// STATE 
+let allLogs = [], logsFilter = 'all';
+
+// PAGE SWITCHING 
+function switchPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    if (el) el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+//  QUICK TEST 
+function quickTest(url) {
+    document.getElementById('urlInput').value = url;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    performScan();
+}
+
+function resetScan() {
+    document.getElementById('resultBox').classList.add('hidden');
+    document.getElementById('urlInput').value = '';
+    document.getElementById('urlInput').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// PROGRESS ANIMATION 
+const SC_MSGS = [
+    'Tokenizing & stemming URL...',
+    'Running TF-IDF vectorization...',
+    'Extracting 15 domain features...',
+    'Computing AI prediction...'
+];
+
+function startProgress() {
+    ['sc1','sc2','sc3','sc4'].forEach((id,i) => {
+        const el = document.getElementById(id);
+        el.className = 'sc-item';
+        el.innerHTML = `<i class="far fa-circle"></i> ${el.textContent.trim()}`;
+    });
+    document.getElementById('scanBar').style.width = '0%';
+    document.getElementById('scanSub').textContent = 'Starting...';
+
+    ['sc1','sc2','sc3','sc4'].forEach((id,i) => {
+        setTimeout(() => {
+            if (i > 0) {
+                const prev = document.getElementById(['sc1','sc2','sc3','sc4'][i-1]);
+                prev.className = 'sc-item sc-done';
+                prev.innerHTML = `<i class="fas fa-check-circle"></i> ${prev.textContent.trim()}`;
             }
-        }
+            const el = document.getElementById(id);
+            el.className = 'sc-item sc-active';
+            el.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ${el.textContent.trim()}`;
+            document.getElementById('scanSub').textContent = SC_MSGS[i];
+            document.getElementById('scanBar').style.width = ((i + 1) * 25) + '%';
+        }, i * 400);
+    });
+}
 
-        window.onload = updateLogs;
-    </script>
+function finishProgress() {
+    ['sc1','sc2','sc3','sc4'].forEach(id => {
+        const el = document.getElementById(id);
+        el.className = 'sc-item sc-done';
+        el.innerHTML = `<i class="fas fa-check-circle"></i> ${el.textContent.trim()}`;
+    });
+    document.getElementById('scanBar').style.width = '100%';
+    document.getElementById('scanSub').textContent = 'Complete!';
+}
+
+// PERFORM SCAN 
+async function performScan() {
+    const input = document.getElementById('urlInput');
+    const url   = input.value.trim();
+    if (!url) {
+        input.classList.add('shake');
+        setTimeout(() => input.classList.remove('shake'), 500);
+        return;
+    }
+
+    const btn = document.getElementById('scanBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i><span>Scanning...</span>';
+
+    document.getElementById('resultBox').classList.add('hidden');
+    document.getElementById('scanningBox').classList.remove('hidden');
+    startProgress();
+
+    const t0 = Date.now();
+
+    try {
+        const res  = await fetch('/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+
+        const wait = Math.max(0, 1700 - (Date.now() - t0));
+        await new Promise(r => setTimeout(r, wait));
+        finishProgress();
+        await new Promise(r => setTimeout(r, 350));
+        document.getElementById('scanningBox').classList.add('hidden');
+
+        data.status === 'error' ? showError(data.message) : showResult(data, url);
+        await loadLogs();
+        updateStats();
+
+    } catch (e) {
+        document.getElementById('scanningBox').classList.add('hidden');
+        showError('Connection error — make sure the Flask server is running.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-magnifying-glass"></i><span>Analyse URL</span>';
+    }
+}
+
+//  SHOW RESULT 
+function showResult(d, url) {
+    const box    = document.getElementById('resultBox');
+    const isSafe = d.status === 'safe';
+    const score  = d.score  || 0;
+
+    box.classList.remove('hidden', 'res-safe', 'res-danger');
+    box.classList.add(isSafe ? 'res-safe' : 'res-danger');
+
+    // Header
+    const hdr = document.getElementById('resultHeader');
+    hdr.className = 'result-header ' + (isSafe ? 'rh-safe' : 'rh-danger');
+    document.getElementById('rhIconEl').className = `fas ${isSafe ? 'fa-shield-check' : 'fa-triangle-exclamation'}`;
+    document.getElementById('rhVerdict').textContent = isSafe ? '✓  This URL appears safe' : '⚠  Phishing URL Detected';
+    document.getElementById('rhVerdict').style.color  = isSafe ? 'var(--green)' : 'var(--red)';
+    document.getElementById('rhUrl').textContent      = url.length > 70 ? url.slice(0, 70) + '…' : url;
+
+    animateRing(score, isSafe);
+
+    // Info tiles
+    document.getElementById('infoAge').textContent   = d.age   || 'Unknown';
+    document.getElementById('infoModel').textContent = (d.model || 'AI Model').replace('Classifier','').replace('Regression','Reg.').trim();
+    const isHttps = d.features?.https;
+    document.getElementById('infoProto').textContent     = isHttps ? 'HTTPS  ✓' : 'HTTP  ✗';
+    document.getElementById('infoProto').style.color     = isHttps ? 'var(--green)' : 'var(--red)';
+    document.getElementById('infoProtoIco').style.color  = isHttps ? 'var(--green)' : 'var(--red)';
+    document.getElementById('infoLen').textContent       = (d.features?.url_length || '—') + ' chars';
+
+    // Signals
+    buildSignals(d.features);
+    buildReasons(d.reasons);
+
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function animateRing(target, isSafe) {
+    const ring = document.getElementById('scRing');
+    const num  = document.getElementById('scoreNum');
+    ring.style.stroke = isSafe ? 'var(--green)' : 'var(--red)';
+    num.style.color   = isSafe ? 'var(--green)' : 'var(--red)';
+    let cur = 0;
+    const iv = setInterval(() => {
+        cur = Math.min(cur + 1.5, target);
+        ring.style.strokeDashoffset = 352 - (cur / 100) * 352;
+        num.textContent = Math.round(cur);
+        if (cur >= target) clearInterval(iv);
+    }, 14);
+}
+
+function buildSignals(f) {
+    const wrap = document.getElementById('signalsList');
+    if (!f) { wrap.innerHTML = ''; return; }
+
+    const sigs = [
+        { key: 'https',           label: 'HTTPS Secure',   icon: 'fa-lock',           goodWhen: true  },
+        { key: 'has_ip',          label: 'IP as Domain',   icon: 'fa-server',         goodWhen: false },
+        { key: 'brand_spoofing',  label: 'Brand Spoofing', icon: 'fa-masks-theater',  goodWhen: false },
+        { key: 'suspicious_tld',  label: 'Suspicious TLD', icon: 'fa-globe',          goodWhen: false },
+    ];
+
+    wrap.innerHTML = sigs.map(s => {
+        const active = f[s.key];
+        const good   = s.goodWhen ? active : !active;
+        const cls    = good ? 'sig-ok' : 'sig-bad';
+        const label  = good ? 'CLEAN' : 'FLAGGED';
+        return `<div class="sig-row ${cls}">
+            <div class="sig-left"><i class="fas ${s.icon}"></i><span>${s.label}</span></div>
+            <span class="sig-badge">${label}</span>
+        </div>`;
+    }).join('');
+
+    const dc   = f.dot_count || 0;
+    const dcOk = dc < 4;
+    wrap.innerHTML += `<div class="sig-row ${dcOk ? 'sig-ok' : 'sig-bad'}">
+        <div class="sig-left"><i class="fas fa-ellipsis"></i><span>Dot Count</span></div>
+        <span class="sig-badge">${dc} dots${!dcOk ? ' ⚠' : ''}</span>
+    </div>`;
+}
+
+function buildReasons(reasons) {
+    const wrap = document.getElementById('reasonsList');
+    wrap.innerHTML = (reasons || []).map(r => {
+        const cls = r.includes('⚠️') ? 'rn-bad' : r.includes('✅') ? 'rn-ok' : 'rn-info';
+        return `<div class="reason-row ${cls}">${r}</div>`;
+    }).join('') || '<div class="reason-row rn-info">No specific signals flagged.</div>';
+}
+
+function showError(msg) {
+    const box = document.getElementById('resultBox');
+    box.classList.remove('hidden','res-safe','res-danger');
+    box.classList.add('res-error');
+    const hdr = document.getElementById('resultHeader');
+    hdr.className = 'result-header rh-warn';
+    document.getElementById('rhIconEl').className = 'fas fa-circle-exclamation';
+    document.getElementById('rhVerdict').textContent = 'Something went wrong';
+    document.getElementById('rhVerdict').style.color = 'var(--orange)';
+    document.getElementById('rhUrl').textContent = msg;
+    document.getElementById('scoreNum').textContent = '—';
+    document.getElementById('signalsList').innerHTML = '';
+    document.getElementById('reasonsList').innerHTML = '';
+    box.classList.remove('hidden');
+}
+
+// LOGS
+async function loadLogs() {
+    try {
+        const res  = await fetch('/logs');
+        const data = await res.json();
+        allLogs = [...(data.bad || []), ...(data.good || [])]
+            .sort((a, b) => b.time.localeCompare(a.time));
+        renderLogs(logsFilter);
+    } catch (e) {}
+}
+
+function renderLogs(filter) {
+    logsFilter = filter;
+    const body = document.getElementById('logBody');
+    let rows = allLogs;
+    if (filter === 'safe')    rows = allLogs.filter(r => r.status === 'safe');
+    if (filter === 'threats') rows = allLogs.filter(r => r.status !== 'safe');
+
+    if (!rows.length) {
+        body.innerHTML = `<tr class="empty-row"><td colspan="5">No records found.</td></tr>`;
+        return;
+    }
+
+    body.innerHTML = rows.map(r => {
+        const safe = r.status === 'safe';
+        const sc   = r.score >= 75 ? 'pill-red' : r.score >= 50 ? 'pill-orange' : 'pill-green';
+        return `<tr class="log-row" onclick="reScan('${r.url}')">
+            <td class="url-td">
+                <i class="fas ${safe ? 'fa-shield-check icon-green' : 'fa-triangle-exclamation icon-red'}"></i>
+                <span title="${r.url}">${r.url.length > 62 ? r.url.slice(0,62)+'…' : r.url}</span>
+            </td>
+            <td><span class="stag ${safe ? 'stag-safe' : 'stag-danger'}">${safe ? 'SAFE' : 'THREAT'}</span></td>
+            <td><span class="spill ${sc}">${r.score}%</span></td>
+            <td class="time-td">${r.time}</td>
+            <td>
+                <button class="re-btn" onclick="event.stopPropagation();reScan('${r.url}')">
+                    <i class="fas fa-rotate-right"></i>
+                </button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function reScan(url) {
+    document.getElementById('urlInput').value = url;
+    switchPage('scanner', document.querySelector('.nav-link'));
+    setTimeout(performScan, 100);
+}
+
+function filterLogs(f, btn) {
+    document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderLogs(f);
+}
+
+function clearLogs() {
+    if (!confirm('Clear all scan history?')) return;
+    allLogs = [];
+    renderLogs(logsFilter);
+    updateStats();
+}
+
+function updateStats() {
+    const safe    = allLogs.filter(r => r.status === 'safe').length;
+    const threats = allLogs.filter(r => r.status !== 'safe').length;
+    const total   = allLogs.length;
+    document.getElementById('stTotal').textContent  = total;
+    document.getElementById('stSafe').textContent   = safe;
+    document.getElementById('stDanger').textContent = threats;
+    document.getElementById('stRate').textContent   = total ? Math.round((threats/total)*100)+'%' : '—';
+}
+
+document.getElementById('urlInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') performScan();
+});
+
+window.onload = async () => { await loadLogs(); updateStats(); };
+</script>
 </body>
 </html>
