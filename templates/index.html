@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhishGuard — AI Phishing Detector</title>
+    <title>AI Powered Phishing Detection System</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!--  NAVBAR -->
 <nav class="navbar">
     <div class="nav-brand">
-        <div class="nav-logo"><i class="fa-solid fa-shield-halved"></i></div>
-        <span class="nav-name">PhishGuard</span>
-        <span class="nav-badge">AI v2.0</span>
+        <div class="nav-logo"><i class="fa-solid fa-shield-virus"></i></div>
+        <span class="nav-name">AI Powered Phishing Detection System</span>
+        <span class="nav-badge"><i class="fa-solid fa-microchip"></i> v2.0</span>
     </div>
     <div class="nav-links">
         <a class="nav-link active" href="#" onclick="switchPage('scanner',this);return false">
@@ -34,16 +34,16 @@
     </div>
 </nav>
 
-<!-- PAGES -->
+<!-- PAGES  -->
 <div class="app">
 
-    <!--  SCANNER PAGE -->
+    <!-- SCANNER PAGE -->
     <div id="page-scanner" class="page active">
 
         <!-- Hero -->
         <div class="hero">
             <div class="hero-inner">
-                <div class="hero-tag"><i class="fa-solid fa-bolt"></i> Real-Time AI Detection</div>
+                <div class="hero-tag"><i class="fa-solid fa-microchip"></i> AI Powered Phishing Detection System</div>
                 <h1 class="hero-title">Is this URL safe?</h1>
                 <p class="hero-desc">
                     Our AI engine analyses any URL using a hybrid machine learning pipeline —
@@ -219,7 +219,7 @@
 
     </div>
 
-    <!-- HISTORY PAGE -->
+    <!-- HISTORY PAGE  -->
     <div id="page-history" class="page">
 
         <div class="page-header">
@@ -264,13 +264,13 @@
 
     </div>
 
-    <!--  ABOUT PAGE -->
+    <!-- ABOUT PAGE -->
     <div id="page-about" class="page">
 
         <div class="page-header">
             <div>
-                <h2 class="page-title">About PhishGuard</h2>
-                <p class="page-desc">How the AI-powered phishing detection engine works</p>
+                <h2 class="page-title">About the System</h2>
+                <p class="page-desc">How the AI Powered Phishing Detection System works</p>
             </div>
         </div>
 
@@ -334,9 +334,9 @@
     </div>
 </div>
 
-<!--  FOOTER -->
+<!-- FOOTER  -->
 <footer class="footer">
-    <span>PhishGuard AI &copy; 2026 — Final Year Project &middot; BSc Information Technology</span>
+    <span><i class="fa-solid fa-shield-virus"></i> AI Powered Phishing Detection System &copy; 2026 — Final Year Project &middot; BSc Information Technology</span>
     <span>Random Forest · 98.1% Accuracy · AUC-ROC 0.994</span>
 </footer>
 
@@ -344,7 +344,7 @@
 // STATE 
 let allLogs = [], logsFilter = 'all';
 
-// PAGE SWITCHING 
+//  PAGE SWITCHING 
 function switchPage(name, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -367,7 +367,7 @@ function resetScan() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// PROGRESS ANIMATION 
+//  PROGRESS ANIMATION 
 const SC_MSGS = [
     'Tokenizing & stemming URL...',
     'Running TF-IDF vectorization...',
@@ -457,7 +457,7 @@ async function performScan() {
     }
 }
 
-//  SHOW RESULT 
+// SHOW RESULT
 function showResult(d, url) {
     const box    = document.getElementById('resultBox');
     const isSafe = d.status === 'safe';
@@ -560,7 +560,7 @@ function showError(msg) {
     box.classList.remove('hidden');
 }
 
-// LOGS
+// LOGS 
 async function loadLogs() {
     try {
         const res  = await fetch('/logs');

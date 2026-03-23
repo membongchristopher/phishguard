@@ -1,3 +1,4 @@
+
 :root {
     --white:    #ffffff;
     --bg:       #f7f8fc;
@@ -56,7 +57,7 @@ body {
     min-height: 100vh;
 }
 
-/* ── NAVBAR */
+/*  NAVBAR  */
 .navbar {
     background: var(--white);
     border-bottom: 1.5px solid var(--border);
@@ -86,10 +87,11 @@ body {
     box-shadow: 0 2px 8px rgba(37,99,235,0.3);
 }
 .nav-name {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 800;
     color: var(--text);
-    letter-spacing: -0.4px;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
 }
 .nav-badge {
     background: var(--blue-lt);
@@ -200,7 +202,7 @@ body {
     font-weight: 400;
 }
 
-/*INPUT BOX*/
+/* INPUT BOX */
 .input-box {
     background: rgba(255,255,255,0.97);
     border-radius: var(--r-lg);
@@ -285,7 +287,7 @@ body {
 .try-bad   { background: var(--red-lt);   color: var(--red);   border-color: var(--red-bdr); }
 .try-chip:hover { opacity: 0.75; transform: translateY(-1px); }
 
-/* ── SCANNING BOX ─────────────────────────────────── */
+/*  SCANNING BOX  */
 .scanning-box {
     background: var(--white);
     border: 1.5px solid var(--border);
@@ -359,7 +361,7 @@ body {
     width: 0%;
 }
 
-/*  RESULT BOX  */
+/*  RESULT BOX */
 .result-box {
     border-radius: var(--r-lg);
     overflow: hidden;
@@ -580,7 +582,7 @@ body {
 .scard-orange .scard-icon { color: var(--orange); }
 .scard-orange .scard-num  { color: var(--orange); }
 
-/*  PAGE HEADER */
+/* PAGE HEADER  */
 .page-header {
     display: flex; align-items: flex-start; justify-content: space-between;
     margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
@@ -625,7 +627,7 @@ body {
 }
 .del-btn:hover { border-color: var(--red); color: var(--red); }
 
-/*  LOG TABLE  */
+/* LOG TABLE  */
 .table-card {
     background: var(--white);
     border: 1.5px solid var(--border);
@@ -702,7 +704,7 @@ body {
     font-size: 15px;
 }
 
-/*  ABOUT */
+/* ABOUT */
 .about-cards {
     display: grid;
     grid-template-columns: repeat(3,1fr);
@@ -790,7 +792,7 @@ body {
 .feat-row span:last-child { color: var(--text-3); font-size: 13px; }
 .feat-row span:first-child { color: var(--text-4); font-size: 13px; text-align: center; }
 
-/*  FOOTER  */
+/* FOOTER */
 .footer {
     background: var(--white);
     border-top: 1.5px solid var(--border);
@@ -800,7 +802,7 @@ body {
     flex-wrap: wrap; gap: 8px;
 }
 
-/*  UTILITIES  */
+/* UTILITIES */
 @keyframes shake {
     0%,100% { transform: translateX(0); }
     25%,75%  { transform: translateX(-5px); }
@@ -812,7 +814,7 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
 
-/*  RESPONSIVE  */
+/* RESPONSIVE */
 @media (max-width: 1000px) {
     .about-cards   { grid-template-columns: repeat(2,1fr); }
     .stats-grid    { grid-template-columns: repeat(2,1fr); }
