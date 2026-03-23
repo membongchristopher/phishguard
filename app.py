@@ -10,6 +10,8 @@ import nltk
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem.snowball import SnowballStemmer
 from scipy.sparse import hstack, csr_matrix
+nltk.download('stopwords', quiet=True)
+nltk.download('punkt', quiet=True)
 
 from flask import Flask, render_template, request, jsonify
 from markupsafe import escape
