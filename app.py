@@ -10,6 +10,7 @@ import nltk
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem.snowball import SnowballStemmer
 from scipy.sparse import hstack, csr_matrix
+import tldextract
 nltk.download('stopwords', quiet=True)
 nltk.download('punkt', quiet=True)
 
@@ -18,7 +19,7 @@ from markupsafe import escape
 
 nltk.download('stopwords', quiet=True)
 
-# WHOIS (optional)
+# WHOIS This is an optional dependency for domain age checking. The app will still run without it, but domain age info will be unavailable.
 try:
     import whois
     WHOIS_AVAILABLE = True
@@ -57,7 +58,30 @@ SUSPICIOUS_TLDS = [
 SUSPICIOUS_KEYWORDS = [
     'login', 'signin', 'verify', 'secure', 'account', 'update',
     'banking', 'confirm', 'password', 'credential', 'suspend',
-    'validate', 'alert', 'free', 'prize'
+    'validate', 'alert', 'free', 'prize', 'phish', 'scam', 'urgent', 'winner'
+]
+
+TRUSTED_DOMAINS = [
+    # Google
+    'google.com', 'mail.google.com', 'drive.google.com',
+    'docs.google.com', 'gmail.com', 'gemini.google.com',
+    # Microsoft
+    'microsoft.com', 'outlook.com', 'office.com',
+    'live.com', 'azure.com', 'copilot.microsoft.com',
+    # Social & Dev
+    'github.com', 'facebook.com', 'twitter.com', 'x.com',
+    'linkedin.com', 'instagram.com', 'youtube.com',
+    'reddit.com', 'stackoverflow.com', 'wikipedia.org',
+    # Shopping & Cloud
+    'amazon.com', 'ebay.com', 'netlify.app',
+    'vercel.app', 'heroku.com', 'onrender.com',
+    # AI Companies
+    'openai.com', 'chat.openai.com',
+    'deepseek.com', 'chat.deepseek.com',
+    'anthropic.com', 'claude.ai',
+    # Other well known
+    'apple.com', 'netflix.com', 'paypal.com',
+    'yahoo.com', 'medium.com', 'notion.so',
 ]
 
 tokenizer = RegexpTokenizer(r'[A-Za-z]+')
@@ -268,7 +292,7 @@ def analyze():
 
         url = data.get('url', '').strip().lower()
 
-        #  Validate URL 
+        # Validate URL 
         if not url:
             return jsonify({'status': 'error', 'message': 'Please enter a URL'})
         if not is_valid_url(url):
@@ -277,20 +301,41 @@ def analyze():
         # Check pipeline loaded 
         if bundle is None:
             return jsonify({'status': 'error', 'message': 'AI model not loaded. Please check server logs.'})
+    
+        ext      = tldextract.extract(url)
+        full     = f"{ext.domain}.{ext.suffix}"
+        with_sub = f"{ext.subdomain}.{ext.domain}.{ext.suffix}" if ext.subdomain else full
 
-        #  Run full prediction pipeline 
+        if any(with_sub == t or with_sub.endswith('.' + t) or full == t
+               for t in TRUSTED_DOMAINS):
+            save_to_logs(url, 'safe', 2)
+            return jsonify({
+                'status' : 'safe',
+                'score'  : 2,
+                'age'    : 'Established Domain',
+                'reasons': ['✅ Verified trusted domain — globally recognised safe website'],
+                'model'  : MODEL_NAME,
+                'features': {
+                    'has_ip'        : False,
+                    'brand_spoofing': False,
+                    'suspicious_tld': False,
+                    'https'         : url.startswith('https'),
+                    'dot_count'     : url.count('.'),
+                    'url_length'    : len(url)
+                }
+            })
         ai_confidence, feats = predict_url(url)
 
-        #  Domain age check 
+        # Domain age check 
         age        = get_domain_age(url)
         risk_score = ai_confidence
 
-        # Score based on domain age
+        # Adjust score based on domain age
         if age is not None:
             if age < 30:
-                risk_score += 15    # very new domain — extra suspicious
+                risk_score += 15    
             elif age > 1000:
-                risk_score -= 10   # well-established domain — slight boost
+                risk_score -= 10    
 
         # Hard boosts for the most reliable phishing signals
         if feats['has_ip']:
