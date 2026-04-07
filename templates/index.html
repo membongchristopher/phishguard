@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Powered Phishing Detection System</title>
+    <!-- Favicon using emoji -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
 </head>
 <body>
 
-<!--  NAVBAR -->
+<!-- NAVBAR -->
 <nav class="navbar">
     <div class="nav-brand">
         <div class="nav-logo"><i class="fa-solid fa-shield-virus"></i></div>
@@ -37,7 +37,7 @@
     </div>
 </nav>
 
-<!-- PAGES  -->
+<!-- PAGES -->
 <div class="app">
 
     <!-- SCANNER PAGE -->
@@ -49,8 +49,8 @@
                 <div class="hero-tag"><i class="fa-solid fa-microchip"></i> AI Powered Phishing Detection System</div>
                 <h1 class="hero-title">Is this URL safe?</h1>
                 <p class="hero-desc">
-                    Our AI engine analyses any URL using a hybrid machine learning pipeline —
-                    combining TF-IDF text analysis with 15 domain intelligence features — and
+                    Our AI engine analyses any URL using a hybrid machine learning pipeline
+                    combining TF-IDF text analysis with 15 domain intelligence features and
                     returns a detailed phishing risk report in seconds.
                 </p>
 
@@ -222,13 +222,13 @@
 
     </div>
 
-    <!-- HISTORY PAGE  -->
+    <!-- HISTORY PAGE -->
     <div id="page-history" class="page">
 
         <div class="page-header">
             <div>
                 <h2 class="page-title">Scan History</h2>
-                <p class="page-desc">All previously scanned URLs — click any row to re-scan it</p>
+                <p class="page-desc">All previously scanned URLs click any row to re-scan it</p>
             </div>
             <div class="page-actions">
                 <div class="filter-tabs">
@@ -281,22 +281,22 @@
             <div class="about-card">
                 <div class="ac-icon blue-ic"><i class="fa-solid fa-diagram-project"></i></div>
                 <h3>Hybrid AI Pipeline</h3>
-                <p>Combines TF-IDF text analysis of URL tokens with 15 hand-crafted numerical features into a 50,015-dimension feature matrix fed into machine learning models.</p>
+                <p>Combines TF-IDF text analysis of URL tokens with 15 hand-crafted numerical features into a 50,015 dimension feature matrix fed into machine learning models.</p>
             </div>
             <div class="about-card">
-                <div class="ac-icon green-ic"><i class="fa-solid fa-tree"></i></div>
-                <h3>Random Forest</h3>
-                <p>Best-performing model with 98.1% test accuracy and AUC-ROC of 0.994, trained on 549,346 labelled URLs from PhishTank and legitimate URL datasets.</p>
+                <div class="ac-icon green-ic"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>Logistic Regression</h3>
+                <p>Best-performing model selected after comparing 4 algorithms. Achieved the highest AUC-ROC on 549,346 labelled URLs. Works well because the hybrid TF-IDF and numerical features create a linearly separable problem.</p>
             </div>
             <div class="about-card">
                 <div class="ac-icon orange-ic"><i class="fa-solid fa-masks-theater"></i></div>
                 <h3>Brand Spoofing Detection</h3>
-                <p>Detects URLs where a known brand (PayPal, Google, Apple) appears in the subdomain but not the actual registered domain — a classic phishing technique.</p>
+                <p>Detects URLs where a known brand (PayPal, Google, Apple) appears in the subdomain but not the actual registered domain, a classic phishing technique.</p>
             </div>
             <div class="about-card">
                 <div class="ac-icon red-ic"><i class="fa-solid fa-globe"></i></div>
                 <h3>Suspicious TLD Detection</h3>
-                <p>Flags domains using free or abused Top-Level Domains like .tk, .xyz, .ml and .ga which are disproportionately used in phishing campaigns.</p>
+                <p>It flags domains using free or abused Top-Level Domains like .tk, .xyz, .ml and .ga which are mostely used in phishing campaigns.</p>
             </div>
             <div class="about-card">
                 <div class="ac-icon purple-ic"><i class="fa-solid fa-server"></i></div>
@@ -306,7 +306,7 @@
             <div class="about-card">
                 <div class="ac-icon teal-ic"><i class="fa-solid fa-code"></i></div>
                 <h3>Flask REST API</h3>
-                <p>Python Flask backend. The /analyze endpoint runs tokenization, TF-IDF, feature extraction, scaling, and model inference — returning a full JSON risk report.</p>
+                <p>Python Flask backend. The /analyze endpoint runs tokenization, TF-IDF, feature extraction, scaling, and model inference returning a full JSON risk report.</p>
             </div>
         </div>
 
@@ -323,7 +323,7 @@
                 <div class="feat-row"><span>5</span><code>at_symbol</code><span class="ftype bin">Binary</span><span>@ redirects browser to post-@ address</span></div>
                 <div class="feat-row"><span>6</span><code>double_slash</code><span class="ftype bin">Binary</span><span>// used as a URL redirect trick</span></div>
                 <div class="feat-row"><span>7</span><code>https</code><span class="ftype bin">Binary</span><span>HTTP (no SSL) is a negative trust signal</span></div>
-                <div class="feat-row"><span>8</span><code>has_ip</code><span class="ftype bin">Binary</span><span>Raw IP as domain — legitimate sites never do this</span></div>
+                <div class="feat-row"><span>8</span><code>has_ip</code><span class="ftype bin">Binary</span><span>Raw IP as domain legitimate sites never do this</span></div>
                 <div class="feat-row"><span>9</span><code>special_char_count</code><span class="ftype int">Integer</span><span>Unusual characters used for encoding tricks</span></div>
                 <div class="feat-row"><span>10</span><code>subdomain_depth</code><span class="ftype int">Integer</span><span>Deep subdomains used to hide the real domain</span></div>
                 <div class="feat-row"><span>11</span><code>domain_length</code><span class="ftype int">Integer</span><span>Very long domains are often auto-generated</span></div>
@@ -337,17 +337,17 @@
     </div>
 </div>
 
-<!-- FOOTER  -->
+<!-- FOOTER -->
 <footer class="footer">
     <span><i class="fa-solid fa-shield-virus"></i> AI Powered Phishing Detection System &copy; 2026 — Final Year Project &middot; BSc Information Technology</span>
-    <span>Random Forest · 98.1% Accuracy · AUC-ROC 0.994</span>
+    <span>Logistic Regression · Best Model · AUC-ROC 0.994</span>
 </footer>
 
 <script>
-// STATE 
+// STATE
 let allLogs = [], logsFilter = 'all';
 
-//  PAGE SWITCHING 
+// PAGE SWITCHING 
 function switchPage(name, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -356,7 +356,7 @@ function switchPage(name, el) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-//  QUICK TEST 
+// QUICK TEST 
 function quickTest(url) {
     document.getElementById('urlInput').value = url;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -370,7 +370,7 @@ function resetScan() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-//  PROGRESS ANIMATION 
+// PROGRESS ANIMATION 
 const SC_MSGS = [
     'Tokenizing & stemming URL...',
     'Running TF-IDF vectorization...',
@@ -460,7 +460,7 @@ async function performScan() {
     }
 }
 
-// SHOW RESULT
+//  SHOW RESULT 
 function showResult(d, url) {
     const box    = document.getElementById('resultBox');
     const isSafe = d.status === 'safe';
